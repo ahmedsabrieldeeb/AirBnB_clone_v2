@@ -73,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -114,14 +114,72 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of any class"""
-        if not args:
+        """
+        Create an object of any class
+        
+        Args:
+            args (str): string coming after create
+        
+        Usage:
+            create <Class name> <param 1> <param 2> <param 3>...
+            <param x>: <key name>=<value>
+        """
+        # dividing the string into parts separated by spaces
+        args_list = args.split()
+
+        # check if no arguments passed after 'create'
+        if not args_list:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+
+        # check if the class doesn't exist in our models never
+        if args_list[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        else:
+            class_name = args_list[0]
+
+        # a dictioanry to hold any possible key:value pairs for initializing
+        params = {}
+
+        # this is a flag used for flexibility in intialization
+        params['__isnew'] = True
+        for param in args_list[1:]:
+            # if there is no '=' in the param, so skip this param (invalid)
+            if '=' not in param:
+                continue
+
+            # assuming key and value before first and after '=' respectively
+            key, value = param.split('=', 1)
+            
+            # check if the value is in "" (double quotes)
+            if len(value) > 1 and value[0] == '"' and value[-1] == '"':
+                # replace each \" with " (remove escape charaters)
+                value = value[1:-1].replace('\"', '"')
+
+                # replace each _ with a white space (original whitespace)
+                value = value.replace('_', ' ')
+
+                params[key] = value
+                continue
+
+            # check if the value is a float
+            if '.' in value:
+                try:
+                    value = float(value)
+                    params[key] = value
+                except ValueError:
+                    continue
+            else:
+                # check if the value is an integer
+                try:
+                    value = int(value)
+                    params[key] = value
+                except ValueError:
+                    continue
+            
+
+        new_instance = HBNBCommand.classes[class_name](**params)
         storage.save()
         print(new_instance.id)
         storage.save()
@@ -272,7 +330,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +338,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg

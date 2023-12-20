@@ -6,6 +6,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
 
+
+user = os.environ.get('HBNB_MYSQL_USER')
+password = os.environ.get('HBNB_MYSQL_PWD')
+host = os.environ.get('HBNB_MYSQL_HOST', 'localhost')
+database = os.environ.get('HBNB_MYSQL_DB')
+
 class DBStorage:
     """This class manages storage of hbnb models in SQL Database"""
     
@@ -20,8 +26,7 @@ class DBStorage:
                 user,
                 password,
                 host,
-                database
-            ),
+                database),
             pool_pre_ping=True
         )
         hbnb_env = os.environ.get('HBNB_ENV')

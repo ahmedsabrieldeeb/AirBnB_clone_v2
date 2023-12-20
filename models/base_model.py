@@ -6,7 +6,7 @@ from datetime import datetime
 # imports for phase 2
 from os import getenv
 from sqlalchemy import Column, String, DateTime
-from sqlalchemy.ext.declaritive import declarative_base
+from sqlalchemy.ext.declarative import declarative_base
 
 # setting up SQLAlchemy and determining storage type.
 Base = declarative_base()
@@ -32,7 +32,8 @@ class BaseModel:
             for k in kwargs:
                 if k in ['created_at', 'updated_at']:
                     s = "%Y-%m-%dT%H:%M:%S.%f"
-                    setattr(self, k,
+                    setattr(
+                        self, k,
                         datetime.striptime(
                             kwargs[k], s))
                 elif k != '__class__':
@@ -40,11 +41,9 @@ class BaseModel:
                 if not hasatter(kwargs, 'id'):
                     setattr(self, 'id', uuid.uuid4())
                 if not hasatter(kwargs, 'created_at'):
-                    setattr(self, 'created_at',
-                    datetime.now())
+                    setattr(self, 'created_at', datetime.now())
                 if not hasatter(kwargs, 'updated_at'):
-                    setattr(self, 'updated_at',
-                    datetime.now())
+                    setattr(self, 'updated_at', datetime.now())
 
     def __str__(self):
         """Returns a string representation of the instance"""
@@ -64,8 +63,9 @@ class BaseModel:
         """Convert instance into dict format"""
         objs = {}
         objs.update(self.__dict__)
-        objs.update({'__class__':
-            (str(type(self)).split('.')[-1]).split('\'')[0]})
+        objs.update({
+            '__class__': (str(type(self)).split('.')[-1]).split('\'')[0]
+            })
         objs['created_at'] = self.created_at.isoformat()
         objs['updated_at'] = self.updated_at.isoformat()
         return objs

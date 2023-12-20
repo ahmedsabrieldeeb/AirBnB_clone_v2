@@ -8,10 +8,12 @@ from sqlalchemy import Column, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-
 class City(BaseModel):
     """ The city class, contains state ID and name """
     __tablename__ = 'cities'
     state_id = Column(String(60), ForeignKey("states_id"), nullable=False)
     name = Column(String(60), nullable=False)
-    places = relationship('Place', backref='cities', cascade="all, delete-orph")
+    places = relationship(
+        'Place',
+        backref='cities',
+        cascade="all, delete-orphan")

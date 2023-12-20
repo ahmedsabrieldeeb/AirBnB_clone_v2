@@ -22,45 +22,53 @@ class BaseModel:
     updated_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
 
     def __init__(self, *args, **kwargs):
-        """Instatntiates a new model"""
+        """Instatntiates a new base model"""
 
-        if '__isnew' in kwargs or not kwargs:
-            from models import storage
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-            kwargs.pop('__isnew')
-            if kwargs:
-                self.__dict__.update(kwargs)
-            storage.new(self)
-        else:
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            del kwargs['__class__']
-            self.__dict__.update(kwargs)
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+
+        if kwargs:
+            for k in kwargs:
+                if k in ['created_at', 'updated_at']:
+                    s = "%Y-%m-%dT%H:%M:%S.%f"
+                    setattr(self, k,
+                        datetime.striptime(
+                            kwargs[k], s))
+                elif k != '__class__':
+                    setattr(self, k, kwargs[k])
+                if not hasatter(kwargs, 'id'):
+                    setattr(self, 'id', uuid.uuid4())
+                if not hasatter(kwargs, 'created_at'):
+                    setattr(self, 'created_at',
+                    datetime.now())
+                if not hasatter(kwargs, 'updated_at'):
+                    setattr(self, 'updated_at',
+                    datetime.now())
 
     def __str__(self):
         """Returns a string representation of the instance"""
-        cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+        objs = self.__dict__.copy()
+        objs.pop("__sa_instance_state", None)
+        return "[{}] ({}) {}".format(
+            self.__class__.__name__, self.id, objs)
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
         from models import storage
         self.updated_at = datetime.now()
+        storage.new(self)
         storage.save()
 
     def to_dict(self):
         """Convert instance into dict format"""
-        dictionary = {}
-        dictionary.update(self.__dict__)
-        dictionary.update({'__class__':
-                          (str(type(self)).split('.')[-1]).split('\'')[0]})
-        dictionary['created_at'] = self.created_at.isoformat()
-        dictionary['updated_at'] = self.updated_at.isoformat()
-        return dictionary
+        objs = {}
+        objs.update(self.__dict__)
+        objs.update({'__class__':
+            (str(type(self)).split('.')[-1]).split('\'')[0]})
+        objs['created_at'] = self.created_at.isoformat()
+        objs['updated_at'] = self.updated_at.isoformat()
+        return objs
 
     def delete(self):
         """delete the current instance"""

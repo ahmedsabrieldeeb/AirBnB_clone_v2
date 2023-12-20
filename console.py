@@ -116,10 +116,10 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """
         Create an object of any class
-        
+
         Args:
             args (str): string coming after create
-        
+
         Usage:
             create <Class name> <param 1> <param 2> <param 3>...
             <param x>: <key name>=<value>
@@ -151,7 +151,7 @@ class HBNBCommand(cmd.Cmd):
 
             # assuming key and value before first and after '=' respectively
             key, value = param.split('=', 1)
-            
+
             # check if the value is in "" (double quotes)
             if len(value) > 1 and value[0] == '"' and value[-1] == '"':
                 # replace each \" with " (remove escape charaters)
@@ -177,7 +177,6 @@ class HBNBCommand(cmd.Cmd):
                     params[key] = value
                 except ValueError:
                     continue
-            
 
         new_instance = HBNBCommand.classes[class_name](**params)
         storage.save()
@@ -245,7 +244,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -377,6 +376,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

@@ -18,7 +18,6 @@ class DBStorage:
     __engine = None
     __session = None
 
-
     def __init__(self):
         """Initialize the DB Storage class"""
         self.__engine = create_engine(
@@ -36,6 +35,7 @@ class DBStorage:
         
     def all(self, cls=None):
         """Retrives All Objects from the Database"""
+        from models.base_model import Base
         from models.base_model import BaseModel
         from models.user import User
         from models.place import Place

@@ -38,11 +38,11 @@ class BaseModel:
                             kwargs[k], s))
                 elif k != '__class__':
                     setattr(self, k, kwargs[k])
-                if not hasatter(kwargs, 'id'):
+                if not hasattr(kwargs, 'id'):
                     setattr(self, 'id', uuid.uuid4())
-                if not hasatter(kwargs, 'created_at'):
+                if not hasattr(kwargs, 'created_at'):
                     setattr(self, 'created_at', datetime.now())
-                if not hasatter(kwargs, 'updated_at'):
+                if not hasattr(kwargs, 'updated_at'):
                     setattr(self, 'updated_at', datetime.now())
 
     def __str__(self):

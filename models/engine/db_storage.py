@@ -53,7 +53,7 @@ class DBStorage:
         else:
             objs = []
             for cls in [State, City, User, Place, Review, Amenity]:
-                clss.extend(self.__session.query(cls).all())
+                cls.extend(self.__session.query(cls).all())
 
         # Add all objects to dict
         for obj in objs:

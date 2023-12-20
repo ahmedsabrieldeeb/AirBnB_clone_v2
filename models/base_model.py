@@ -34,7 +34,7 @@ class BaseModel:
                     s = "%Y-%m-%dT%H:%M:%S.%f"
                     setattr(
                         self, k,
-                        datetime.striptime(
+                        datetime.strptime(
                             kwargs[k], s))
                 elif k != '__class__':
                     setattr(self, k, kwargs[k])

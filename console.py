@@ -62,36 +62,36 @@ class HBNBCommand(cmd.Cmd):
 
             # isolate and validate <command>
             _cmd = lst[0]
-            #pline[pline.find('.') + 1:pline.find('(')]
+            # pline[pline.find('.') + 1:pline.find('(')]
             _cls = lst[1]
             lst = lst[2:]
             line = ''.join([_cmd, _cls, lst])
 
-            #if _cmd not in HBNBCommand.dot_cmds:
+            # if _cmd not in HBNBCommand.dot_cmds:
             #    raise Exception
 
             # if parantheses contain arguments, parse them
-            #pline = pline[pline.find('(') + 1:pline.find(')')]
-            #if pline:
-                # partition args: (<id>, [<delim>], [<*args>])
+            # pline = pline[pline.find('(') + 1:pline.find(')')]
+            # if pline:
+            # partition args: (<id>, [<delim>], [<*args>])
             #    pline = pline.partition(', ')  # pline convert to tuple
 
-                # isolate _id, stripping quotes
+            # isolate _id, stripping quotes
             #    _id = pline[0].replace('\"', '')
-                # possible bug here:
-                # empty quotes register as empty _id when replaced
+            # possible bug here:
+            # empty quotes register as empty _id when replaced
 
-                # if arguments exist beyond _id
+            # if arguments exist beyond _id
             #    pline = pline[2].strip()  # pline is now str
             #    if pline:
-                    # check for *args or **kwargs
+            # check for *args or **kwargs
             #        if pline[0] == '{' and pline[-1] == '}'\
             #                and type(eval(pline)) is dict:
             #            _args = pline
             #        else:
             #            _args = pline.replace(',', '')
-                        # _args = _args.replace('\"', '')
-            #line = ' '.join([_cmd, _cls, _id, _args])
+            #            _args = _args.replace('\"', '')
+            # line = ' '.join([_cmd, _cls, _id, _args])
 
         except Exception as mess:
             pass

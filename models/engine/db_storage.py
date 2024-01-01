@@ -12,9 +12,10 @@ password = os.environ.get('HBNB_MYSQL_PWD')
 host = os.environ.get('HBNB_MYSQL_HOST', 'localhost')
 database = os.environ.get('HBNB_MYSQL_DB')
 
+
 class DBStorage:
     """This class manages storage of hbnb models in SQL Database"""
-    
+
     __engine = None
     __session = None
 
@@ -32,7 +33,6 @@ class DBStorage:
         if (hbnb_env == 'test'):
             Base.metadata.drop_all(self.__engine)
 
-        
     def all(self, cls=None):
         """Retrives All Objects from the Database"""
         from models.base_model import Base
@@ -90,7 +90,6 @@ class DBStorage:
             )
         )
         self.__session = Session()
-
 
     def delete(self, obj=None):
         """

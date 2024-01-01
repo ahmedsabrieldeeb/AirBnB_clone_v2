@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import copy
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -19,8 +20,10 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
+               'BaseModel': BaseModel,
+               'User': User, 'Place': Place,
+               'State': State, 'City': City,
+               'Amenity': Amenity,
                'Review': Review
               }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
@@ -44,42 +47,51 @@ class HBNBCommand(cmd.Cmd):
         _cmd = _cls = _id = _args = ''  # initialize line elements
 
         # scan for general formating - i.e '.', '(', ')'
+        if not ('=' in line in line):
+            return line
+
         if not ('.' in line and '(' in line and ')' in line):
             return line
 
         try:  # parse line left to right
             pline = line[:]  # parsed line
 
+            lst = pline.split()
             # isolate <class name>
-            _cls = pline[:pline.find('.')]
+            # _cls = pline[:pline.find('.')]
 
             # isolate and validate <command>
-            _cmd = pline[pline.find('.') + 1:pline.find('(')]
-            if _cmd not in HBNBCommand.dot_cmds:
-                raise Exception
+            _cmd = lst[0]
+            #pline[pline.find('.') + 1:pline.find('(')]
+            _cls = lst[1]
+            lst = lst[2:]
+            line = ''.join([_cmd, _cls, lst])
+
+            #if _cmd not in HBNBCommand.dot_cmds:
+            #    raise Exception
 
             # if parantheses contain arguments, parse them
-            pline = pline[pline.find('(') + 1:pline.find(')')]
-            if pline:
+            #pline = pline[pline.find('(') + 1:pline.find(')')]
+            #if pline:
                 # partition args: (<id>, [<delim>], [<*args>])
-                pline = pline.partition(', ')  # pline convert to tuple
+            #    pline = pline.partition(', ')  # pline convert to tuple
 
                 # isolate _id, stripping quotes
-                _id = pline[0].replace('\"', '')
+            #    _id = pline[0].replace('\"', '')
                 # possible bug here:
                 # empty quotes register as empty _id when replaced
 
                 # if arguments exist beyond _id
-                pline = pline[2].strip()  # pline is now str
-                if pline:
+            #    pline = pline[2].strip()  # pline is now str
+            #    if pline:
                     # check for *args or **kwargs
-                    if pline[0] == '{' and pline[-1] == '}'\
-                            and type(eval(pline)) is dict:
-                        _args = pline
-                    else:
-                        _args = pline.replace(',', '')
+            #        if pline[0] == '{' and pline[-1] == '}'\
+            #                and type(eval(pline)) is dict:
+            #            _args = pline
+            #        else:
+            #            _args = pline.replace(',', '')
                         # _args = _args.replace('\"', '')
-            line = ' '.join([_cmd, _cls, _id, _args])
+            #line = ' '.join([_cmd, _cls, _id, _args])
 
         except Exception as mess:
             pass
@@ -128,12 +140,12 @@ class HBNBCommand(cmd.Cmd):
         args_list = args.split()
 
         # check if no arguments passed after 'create'
-        if not args_list:
+        if not args:
             print("** class name missing **")
             return
 
         # check if the class doesn't exist in our models never
-        if args_list[0] not in HBNBCommand.classes:
+        elif args_list[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
         else:

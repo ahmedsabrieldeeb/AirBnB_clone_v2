@@ -44,8 +44,10 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
+                    'BaseModel': BaseModel,
+                    'User': User, 'Place': Place,
+                    'State': State, 'City': City,
+                    'Amenity': Amenity,
                     'Review': Review
                   }
         try:
@@ -67,3 +69,7 @@ class FileStorage:
             key = "{}.{}".format(obj.__class__.__name__, obj.id)
             del FileStorage.__objects[key]
             self.save()
+
+    def close(self):
+        """calls reload method"""
+        self.reload()

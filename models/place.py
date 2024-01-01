@@ -4,7 +4,7 @@
 from models.base_model import BaseModel, Base
 
 # new imports for phase 2
-from sqlalchemy import Column, String, Integer,
+from sqlalchemy import Column, String, Integer
 from sqlalchemy import Float, DateTime, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from os import getenv

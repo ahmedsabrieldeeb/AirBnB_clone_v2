@@ -136,64 +136,35 @@ class HBNBCommand(cmd.Cmd):
             create <Class name> <param 1> <param 2> <param 3>...
             <param x>: <key name>=<value>
         """
-        # dividing the string into parts separated by spaces
-        args_list = args.split()
+        # print("Inside do_create --> \n")
+        params = args.split()
 
-        # check if no arguments passed after 'create'
         if not args:
-            print("** class name missing **")
+            print('** class name missing **')
             return
-
-        # check if the class doesn't exist in our models never
-        elif args_list[0] not in HBNBCommand.classes:
-            print("** class doesn't exist **")
+        elif params[0] not in HBNBCommand.classes:
+            print("** class dosen't exist **")
             return
-        else:
-            class_name = args_list[0]
-
-        # a dictioanry to hold any possible key:value pairs for initializing
-        params = {}
-
-        # this is a flag used for flexibility in intialization
-        params['__isnew'] = True
-        for param in args_list[1:]:
-            # if there is no '=' in the param, so skip this param (invalid)
-            if '=' not in param:
-                continue
-
-            # assuming key and value before first and after '=' respectively
-            key, value = param.split('=', 1)
-
-            # check if the value is in "" (double quotes)
-            if len(value) > 1 and value[0] == '"' and value[-1] == '"':
-                # replace each \" with " (remove escape charaters)
-                value = value[1:-1].replace('\"', '"')
-
-                # replace each _ with a white space (original whitespace)
-                value = value.replace('_', ' ')
-
-                params[key] = value
-                continue
-
-            # check if the value is a float
-            if '.' in value:
-                try:
-                    value = float(value)
-                    params[key] = value
-                except ValueError:
-                    continue
+        new_instance = HBNBCommand.classes[params[0]]()
+        # print(new_instance, "\n")
+        kv_dict = {}
+        for i in params[1:]:
+            kv = i.split('=')
+            if '"' in kv[1]:
+                value = kv[1].replace('"', '').replace('_', ' ')
+                kv_dict[kv[0]] = value
             else:
-                # check if the value is an integer
                 try:
-                    value = int(value)
-                    params[key] = value
+                    if '.' in kv[1]:
+                        kv_dict[kv[0]] = float(kv[1])
+                    else:
+                        kv_dict[kv[0]] = int(kv[1])
                 except ValueError:
-                    continue
-
-        new_instance = HBNBCommand.classes[class_name](**params)
-        storage.save()
+                    pass
+        new_instance.__dict__.update(kv_dict)
+        # print("New:   ", new_instance)
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """

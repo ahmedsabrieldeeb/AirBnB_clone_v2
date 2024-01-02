@@ -31,6 +31,7 @@ class FileStorage:
             temp.update(FileStorage.__objects)
             for key, val in temp.items():
                 temp[key] = val.to_dict()
+            print(temp, "\n")
             json.dump(temp, f)
 
     def reload(self):
@@ -53,7 +54,7 @@ class FileStorage:
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
-                print(FileStorage.__file_path)
+                # print(FileStorage.__file_path)
                 temp = json.load(f)
                 for key, val in temp.items():
                     self.all()[key] = classes[val['__class__']](**val)

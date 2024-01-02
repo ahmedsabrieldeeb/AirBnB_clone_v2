@@ -68,6 +68,8 @@ class BaseModel:
             })
         objs['created_at'] = self.created_at.isoformat()
         objs['updated_at'] = self.updated_at.isoformat()
+        if (objs["_sa_instance_state"]):
+            del objs["_sa_instance_state"]
         return objs
 
     def delete(self):

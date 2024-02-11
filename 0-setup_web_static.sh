@@ -19,12 +19,7 @@ sudo ln -sf /data/web_static/releases/test /data/web_static/current
 # Give ownership of /data/ folder to ubuntu user and group
 sudo chown -R ubuntu:ubuntu /data/
 
-# Update Nginx configuration
-sudo sed -i '/^server {/a \
-\
-\tlocation \/hbnb_static\/ {\
-\t\talias \/data\/web_static\/current\/;\
-\t}\n' /etc/nginx/sites-available/default
+sudo sed -i '/^server {/a \\\tlocation \/hbnb_static\/ {\\\t\talias \/data\/web_static\/current\/;\\\t}\n' /etc/nginx/sites-available/default
 
 # Restart Nginx
 sudo service nginx restart

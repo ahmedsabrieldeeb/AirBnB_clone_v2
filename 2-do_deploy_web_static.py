@@ -35,7 +35,7 @@ def do_deploy(archive_path):
         run('sudo tar -xzf /tmp/{}.tgz -C {}'.format(archive_filename, release_folder))
         run('sudo rm /tmp/{}.tgz'.format(archive_filename))
         run('sudo rm /data/web_static/current')
-        run('sudo ln -s {} /data/web_static/current'.format(release_folder))
+        run('sudo ln -s {}/web_static /data/web_static/current'.format(release_folder))
 
         return True
     except Exception as e:

@@ -5,19 +5,7 @@ from fabric.api import env, run, put, local, task
 from datetime import datetime
 from os.path import exists
 
-env.hosts = ['ubuntu@100.26.11.29', 'ubuntu@18.204.20.248']
-
-
-def do_pack():
-    """Generates a .tgz archive from the contents of the web_static folder"""
-    try:
-        current_time = datetime.now().strftime("%Y%m%d%H%M%S")
-        archive_name = "web_static_" + current_time + ".tgz"
-        local("mkdir -p versions")
-        local("tar -czvf versions/{} web_static".format(archive_name))
-        return "versions/{}".format(archive_name)
-    except Exception as e:
-        return None
+env.hosts = ['100.26.11.29', '18.204.20.248']
 
 
 def do_deploy(archive_path):

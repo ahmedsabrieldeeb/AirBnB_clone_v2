@@ -8,8 +8,6 @@ from os.path import exists
 env.hosts = ['ubuntu@100.26.11.29', 'ubuntu@18.204.20.248']
 
 
-
-@task
 def do_pack():
     """Generates a .tgz archive from the contents of the web_static folder"""
     try:
@@ -22,7 +20,6 @@ def do_pack():
         return None
 
 
-@task
 def do_deploy(archive_path):
     """Distributes an archive to web servers"""
     if not exists(archive_path):

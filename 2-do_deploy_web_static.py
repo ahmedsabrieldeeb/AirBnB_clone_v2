@@ -6,7 +6,7 @@ from datetime import datetime
 from os.path import exists
 
 env.hosts = ['ubuntu@100.26.11.29', 'ubuntu@18.204.20.248']
-env.key_filename = "/home/ahmedisdeep/.ssh/school"
+
 
 
 @task
